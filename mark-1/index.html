@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ESP8266 LED Control</title>
+    <style>
+        button {
+            display: block;
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ESP8266 LED Control</h1>
+    <button onclick="toggleLED('device1', 'LED1', 'on')">Device 1 - Toggle LED 1 On</button>
+    <button onclick="toggleLED('device1', 'LED1', 'off')">Device 1 - Toggle LED 1 Off</button>
+    <button onclick="toggleLED('device1', 'LED2', 'on')">Device 1 - Toggle LED 2 On</button>
+    <button onclick="toggleLED('device1', 'LED2', 'off')">Device 1 - Toggle LED 2 Off</button>
+    <button onclick="toggleLED('device2', 'LED3', 'on')">Device 2 - Toggle LED 3 On</button>
+    <button onclick="toggleLED('device2', 'LED3', 'off')">Device 2 - Toggle LED 3 Off</button>
+    <button onclick="toggleLED('device2', 'LED4', 'on')">Device 2 - Toggle LED 4 On</button>
+    <button onclick="toggleLED('device2', 'LED4', 'off')">Device 2 - Toggle LED 4 Off</button>
+
+    <script>
+        var ws = new WebSocket('ws://192.168.122.50:8001');
+
+        ws.onopen = function() {
+            console.log('WebSocket is connected.');
+        };
+
+        ws.onmessage = function(event) {
+            console.log('Received from server:', event.data);
+            alert(event.data);
+        };
+
+        ws.onclose = function() {
+            console.log('WebSocket is closed.');
+        };
+
+        function toggleLED(deviceId, ledName, status) {
+            ws.send(JSON.stringify({ device_id: deviceId, led_name: ledName, status: status }));
+        }
+    </script>
+</body>
+</html>
